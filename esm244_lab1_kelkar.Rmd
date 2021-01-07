@@ -1,0 +1,38 @@
+---
+title: "ESM 244 Lab 1"
+author: "Mukta Kelkar"
+date: "1/7/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(here)
+library(sf)
+library(tmap)
+```
+
+### Read in SF Trees Data
+
+```{r}
+sf_trees <- read.csv(here("data", "sf_trees", "sf_trees.csv"))
+```
+
+### Basic wrangling reminders
+
+refresh some skills for data wrangling and & summary statistics using functions in the `dplyr` package
+
+Find the top 5 highest observations of trees by legal_status, do some wrangling, make a graph.
+
+```{r}
+top_5_status <- sf_trees %>% 
+  count(legal_status) %>% 
+  drop_na(legal_status) %>%    
+  rename(tree_count = n) %>%   #new name = old name
+  relocate(tree_count) %>%      #moves tree_count to the first column position. can do more variations on relocating
+  slice_max(tree_count, n = 5) %>% 
+  
+
+```
+
