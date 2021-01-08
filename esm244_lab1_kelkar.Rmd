@@ -31,8 +31,45 @@ top_5_status <- sf_trees %>%
   drop_na(legal_status) %>%    
   rename(tree_count = n) %>%   #new name = old name
   relocate(tree_count) %>%      #moves tree_count to the first column position. can do more variations on relocating
-  slice_max(tree_count, n = 5) %>% 
-  
+  slice_max(tree_count, n = 5)
+```
 
+Make a graph of the top 5 observations by legal status
+
+```{r}
+ggplot(data = top_5_status, aes(x = fct_reorder(legal_status, tree_count), y = tree_count)) + 
+  geom_col() +
+  labs(x = "Legal Status",
+       y = "Tree Count") +
+  coord_flip() +
+  theme_minimal()
+```
+
+### A few more data wrangling refresher examples
+
+Only keep observations for blackwood acacia trees
+```{r}
+blackwood_acacia <- sf_trees %>% 
+  filter(str_detect(species, "Blackwood Acacia")) %>% 
+  select(legal_status, date, latitude, longitude)
+
+ggplot(data = blackwood_acacia, aes(x = longitude, y = latitude)) +
+  geom_point()
+```
+
+### tidyr::separate() and unite()
+
+Useful for combining or separating columns
+
+```{r}
+sf_trees_species <- sf_trees %>% 
+  separate(species, into = c("spp_scientific", "spp_common"), sep = "::")
+```
+
+Example of tidyr::unite()
+
+```{r}
+sf_trees_unite <- sf_trees %>% 
+  unite("id_status", tree_id:legal_status, sep = "_cool!_")
 ```
 
